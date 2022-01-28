@@ -1,55 +1,56 @@
-import {useMoralisDapp} from "providers/MoralisDappProvider/MoralisDappProvider"
-import {useState} from "react"
-import Posts from "./components/Posts"
-import Reputation from "components/Reputation"
+import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
+import { useState } from "react";
+import Posts from "./components/Posts";
+// import Reputation from "components/Reputation";
+import Blockie from "components/Blockie";
+import AddPost from "./components/AddPost";
 
-import {Avatar, Button }from "antd" 
-import glStyles from "components/gstyles"
-import Blockie from "components/Blockie"
-import AddPost from "./components/AddPost"
+import { Card, Typography, Avatar, Button, Stack } from "@mui/material";
 
 const Feed = () => {
-    const {selectedCategory} = useMoralisDapp();
-    const [showAddPost, setShowAddPost] = useState(false)
+  const { selectedCategory } = useMoralisDapp();
+  const [showAddPost, setShowAddPost] = useState(false);
 
-    let result = null;
-    
-    function toogleShowAddPost(){
-        setShowAddPost(!showAddPost);
-    }
+  let result = null;
 
-    if (selectedCategory["category"] === "default") {
-        result = (
-          <div className="col-lg-9">
-            <h3>Choose a Category</h3>
-          </div>
-        );
-      }
-    else {
-        result = (
-        <div className="col-lg-9">
-            <div
-                style={{
-                    ...glStyles.card,
-                    padding: "10px 13px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                }}
-            >
-                <Avatar src={<Blockie currentWallet />} />
-                <h4> Your Reputation in {selectedCategory["category"]} is <Reputation/> </h4>
-                <Button shape="round" onClick={toogleShowAddPost}>
-                    Post
-                </Button>
-            </div>
-            {showAddPost ? <AddPost/>:""}
-            <Posts/>
-        </div>    
-        )
-    }
-    
-    return result;
-}
+  function toogleShowAddPost() {
+    setShowAddPost(!showAddPost);
+  }
 
-export default Feed
+  if (selectedCategory["category"] === "default") {
+  } else {
+    result = (
+      <Stack spacing={2} sx={{ width: 1 }}>
+        <Card
+          sx={{
+            padding: "10px 13px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            borderRadius: 2,
+          }}
+        >
+          <Avatar sx={{ width: 30, height: 30 }}>
+            <Blockie currentWallet />
+          </Avatar>
+          <Typography variant="h5" color="yellow">
+            Proposals
+          </Typography>
+          <Button
+            sx={{ borderRadius: 5 }}
+            variant="outlined"
+            onClick={toogleShowAddPost}
+          >
+            Propose
+          </Button>
+        </Card>
+        {showAddPost ? <AddPost /> : ""}
+        <Posts />
+      </Stack>
+    );
+  }
+
+  return result;
+};
+
+export default Feed;

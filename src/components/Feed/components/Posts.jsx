@@ -1,34 +1,45 @@
+import { Card, Typography } from "@mui/material";
 import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
 import { useMoralisQuery } from "react-moralis";
-import Post from "./Post"
+import Post from "./Post";
 
 const Posts = () => {
-    const { selectedCategory } = useMoralisDapp();
-    
-    const queryPost = useMoralisQuery(
-        "Posts",
-        (query) => query.equalTo("categoryId", selectedCategory["categoryId"]),
-        [selectedCategory],
-        { live: true }
-      );
+  const { selectedCategory } = useMoralisDapp();
 
-    const fetchedPosts = JSON.parse(JSON.stringify(queryPost.data, ["postId", "contentId", "postOwner"])).reverse();
-    const havePosts = fetchedPosts.length > 0 ? true : false;
+  const queryPost = useMoralisQuery(
+    "Posts",
+    (query) => query.equalTo("categoryId", selectedCategory["categoryId"]),
+    [selectedCategory],
+    { live: true }
+  );
 
-    const emptyResult = (
-                        <div>
-                            <h3>Be the first to post here for</h3>
-                            <h3>{selectedCategory["category"]} </h3>
-                        </div>
-                    );
-    
-    const postResult = (<div>
-                            {fetchedPosts.map((post) => (
-                                <Post key={post["postId"]} post={post} />
-                            ))}
-                        </div>)
+  const fetchedPosts = JSON.parse(
+    JSON.stringify(queryPost.data, ["postId", "contentId", "postOwner"])
+  ).reverse();
+  const havePosts = fetchedPosts.length > 0 ? true : false;
 
-    return havePosts ? postResult : emptyResult;
-}
+  const emptyResult = (
+    <Card style={{ textAlign: "center", padding: 24, borderRadius: 5 }}>
+      <Typography variant="h6" color="yellow">
+        No Proposals yet
+      </Typography>
+    </Card>
+  );
 
-export default Posts
+  const postResult = (
+    <div>
+      {fetchedPosts.map((post) => (
+        <Card
+          key={post["postId"]}
+          sx={{ padding: "0px 15px", marginBottom: "10px" }}
+        >
+          <Post key={post["postId"]} post={post} />
+        </Card>
+      ))}
+    </div>
+  );
+
+  return havePosts ? postResult : emptyResult;
+};
+
+export default Posts;

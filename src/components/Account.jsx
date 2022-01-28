@@ -1,110 +1,121 @@
-import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
 import { useMoralis } from "react-moralis";
+import {
+  Button,
+  Box,
+  Alert,
+  Chip,
+  AppBar,
+  Toolbar,
+  Avatar,
+  Tooltip,
+  IconButton,
+} from "@mui/material";
+import QuickMenu from "./QuickMenu";
+import { LoadingButton } from "@mui/lab";
+import React, { useEffect, useState } from "react";
 import { getEllipsisTxt } from "helpers/formatters";
-import Blockie from "./Blockie";
-import { Button, Card, Modal } from "antd";
-import { useState } from "react";
-import Address from "./Address/Address";
-import { SelectOutlined } from "@ant-design/icons";
-import { getExplorer } from "helpers/networks";
-const styles = {
-  account: {
-    height: "42px",
-    padding: "0 15px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "fit-content",
-    borderRadius: "12px",
-    backgroundColor: "rgb(244, 244, 244)",
-    cursor: "pointer",
-  },
-  text: {
-    color: "#21BF96",
-  },
-};
+import Blockie from "components/Blockie";
+import Avaxlogo from "./avaxlogo.svg";
 
-function Account() {
-  const { authenticate, isAuthenticated, logout } = useMoralis();
-  const { walletAddress, chainId } = useMoralisDapp();
-  const [isModalVisible, setIsModalVisible] = useState(false);
+function Auth() {
+  const {
+    authenticate,
+    isAuthenticated,
+    isAuthenticating,
+    authError,
+    user,
+    enableWeb3,
+    isWeb3Enabled,
+    isWeb3EnableLoading,
+  } = useMoralis();
+  useEffect(() => {
+    if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) {
+      enableWeb3();
+    }
 
-  if (!isAuthenticated) {
-    return (
-      <div
-        style={styles.account}
-        onClick={() => authenticate({ signingMessage: "Hello World!" })}
-      >
-        <p style={styles.text}>Authenticate</p>
-      </div>
-    );
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
+  const [ens, setEns] = useState("");
+
+  useEffect(() => {
+    if (!isWeb3Enabled) {
+      enableWeb3();
+    }
+    const isEns = () => {
+      if (isAuthenticated && isWeb3Enabled) {
+        const _ens = null;
+        setEns(_ens);
+      }
+    };
+
+    isEns();
+  }, [enableWeb3, isAuthenticated, isWeb3Enabled]);
+
+  const formatAddress = () => {
+    return ens ?? getEllipsisTxt(user.get("ethAddress"));
+  };
 
   return (
-    <>
-      <div style={styles.account} onClick={() => setIsModalVisible(true)}>
-        <p style={{ marginRight: "5px", ...styles.text }}>
-          {getEllipsisTxt(walletAddress, 6)}
-        </p>
-        <Blockie currentWallet scale={3} />
-      </div>
-      <Modal
-        visible={isModalVisible}
-        footer={null}
-        onCancel={() => setIsModalVisible(false)}
-        bodyStyle={{
-          padding: "15px",
-          fontSize: "17px",
-          fontWeight: "500",
+    <Box>
+      <AppBar
+        position="static"
+        sx={{
+          background: "inherit",
+          padding: 1,
+          boxShadow: "none",
         }}
-        style={{ fontSize: "16px", fontWeight: "500" }}
-        width="400px"
       >
-        Account
-        <Card
-          style={{
-            marginTop: "10px",
-            borderRadius: "1rem",
+        <img
+          src={Avaxlogo}
+          alt="logo"
+          style={{ width: 50, position: "absolute" }}
+        />
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            paddingRight: 0,
           }}
-          bodyStyle={{ padding: "15px" }}
         >
-          <Address
-            avatar="left"
-            size={6}
-            copyable
-            style={{ fontSize: "20px" }}
-          />
-          <div style={{ marginTop: "10px", padding: "0 10px" }}>
-            <a
-              href={`${getExplorer(chainId)}/address/${walletAddress}`}
-              target="_blank"
-              rel="noreferrer"
+          <IconButton variant="filled">
+            <img src={Avaxlogo} alt="avax logo" style={{ width: 25 }} />
+          </IconButton>
+          {isAuthenticated && (
+            <Tooltip title="click to copy" arrow>
+              <Chip
+                avatar={
+                  <Avatar>
+                    <Blockie address={user.get("ethAddress")} size={7} />
+                  </Avatar>
+                }
+                label={formatAddress()}
+                onClick={() =>
+                  navigator.clipboard.writeText(user.get("ethAddress"))
+                }
+              />
+            </Tooltip>
+          )}
+          {authError && <Alert severity="error">{authError.message}</Alert>}
+          {isAuthenticating ? (
+            <LoadingButton loading variant="outlined">
+              Connecting
+            </LoadingButton>
+          ) : !isAuthenticated ? (
+            <Button
+              onClick={() =>
+                !isWeb3Enabled ? enableWeb3() && authenticate() : authenticate()
+              }
             >
-              <SelectOutlined style={{ marginRight: "5px" }} />
-              View on Explorer
-            </a>
-          </div>
-        </Card>
-        <Button
-          size="large"
-          type="primary"
-          style={{
-            width: "100%",
-            marginTop: "10px",
-            borderRadius: "0.5rem",
-            fontSize: "16px",
-            fontWeight: "500",
-          }}
-          onClick={() => {
-            logout();
-            setIsModalVisible(false);
-          }}
-        >
-          Disconnect Wallet
-        </Button>
-      </Modal>
-    </>
+              Login
+            </Button>
+          ) : (
+            <QuickMenu />
+          )}
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 }
 
-export default Account;
+export default Auth;
