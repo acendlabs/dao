@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { ColorModeContext } from "../App";
 import {
@@ -33,7 +32,6 @@ function QuickMenu() {
     setAnchorEl(null);
   };
 
-  const navigate = useNavigate();
   return (
     <React.Fragment>
       <IconButton
@@ -84,7 +82,9 @@ function QuickMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={() => navigate("/d")}>
+        <MenuItem
+          onClick={() => window.location.replace("https://app.acendao.xyz")}
+        >
           <ListItemIcon>
             <CandlestickChartOutlinedIcon
               fontSize="small"
@@ -93,7 +93,9 @@ function QuickMenu() {
           </ListItemIcon>
           Dex
         </MenuItem>
-        <MenuItem onClick={() => navigate("/n")}>
+        <MenuItem
+          onClick={() => window.location.replace("https://app.acendao.xyz")}
+        >
           <ListItemIcon>
             <LandscapeOutlinedIcon fontSize="small" sx={{ color: "yellow" }} />
           </ListItemIcon>

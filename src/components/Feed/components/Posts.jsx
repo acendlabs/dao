@@ -20,7 +20,7 @@ const Posts = () => {
 
   const emptyResult = (
     <Card style={{ textAlign: "center", padding: 24, borderRadius: 5 }}>
-      <Typography variant="h6" color="yellow">
+      <Typography variant="h6" color="unset">
         No Proposals yet
       </Typography>
     </Card>

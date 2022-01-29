@@ -33,7 +33,7 @@ const Feed = () => {
           <Avatar sx={{ width: 30, height: 30 }}>
             <Blockie currentWallet />
           </Avatar>
-          <Typography variant="h5" color="yellow">
+          <Typography variant="h5" color="unset">
             Proposals
           </Typography>
           <Button

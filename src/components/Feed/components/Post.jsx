@@ -2,7 +2,7 @@ import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvide
 import { useMoralisQuery, useWeb3ExecuteFunction } from "react-moralis";
 import { useEffect, useState, createElement } from "react";
 import { Comment, message } from "antd";
-import { Avatar, Divider, Typography, Tooltip } from "@mui/material";
+import { Avatar, Divider, Typography, Tooltip, Box } from "@mui/material";
 import {
   DislikeOutlined,
   LikeOutlined,
@@ -92,30 +92,32 @@ const Post = ({ post }) => {
 
   const actions = [
     <Tooltip key="comment-basic-like" title="for">
-      <span
-        style={{
+      <Box
+        component="span"
+        sx={{
           fontSize: "15px",
           display: "flex",
           alignItems: "center",
           marginRight: "16px",
-          color: "yellow",
+          color: "unset",
         }}
         onClick={() => vote("voteUp")}
       >
         {createElement(voteStatus === "liked" ? LikeFilled : LikeOutlined)} For
-      </span>
+      </Box>
     </Tooltip>,
-    <span style={{ fontSize: "15px", color: "white" }}>
+    <Box component="span" sx={{ fontSize: "15px", color: "unset" }}>
       <Votes postId={postId} />
-    </span>,
+    </Box>,
     <Tooltip key="comment-basic-dislike" title="against">
-      <span
-        style={{
+      <Box
+        component="span"
+        sx={{
           fontSize: "15px",
           display: "flex",
           alignItems: "center",
           marginLeft: "8px",
-          color: "yellow",
+          color: "unset",
         }}
         onClick={() => vote("voteDown")}
       >
@@ -123,7 +125,7 @@ const Post = ({ post }) => {
           voteStatus === "disliked" ? DislikeFilled : DislikeOutlined
         )}{" "}
         Against
-      </span>
+      </Box>
     </Tooltip>,
   ];
 
@@ -148,10 +150,10 @@ const Post = ({ post }) => {
           <Typography variant="h6" color="white" gutterBottom>
             {postContent["title"]}
           </Typography>
-          <Typography variant="body1" gutterBottom paragraph>
+          <Typography variant="body2" gutterBottom paragraph>
             {postContent["content"]}
           </Typography>
-          <Divider sx={{ margin: "15px 0" }} />
+          <Divider variant="middle" sx={{ margin: "15px 0", opacity: 0.2 }} />
         </>
       }
     />

@@ -1,6 +1,6 @@
 import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
 import { Menu } from "antd";
-import { Box } from "@mui/material";
+import { Card } from "@mui/material";
 import "./style.css";
 
 const Categories = ({ categories }) => {
@@ -14,14 +14,14 @@ const Categories = ({ categories }) => {
   }
 
   return (
-    <Box sx={{ width: 1 }}>
+    <Card sx={{ width: 1 }}>
       <Menu
         onClick={(e) => selectCategory(e.key)}
         style={{
           backgroundColor: "rgba(255, 255, 255, 0.09)",
           padding: "10px 0",
           borderRadius: 5,
-          color: "yellow",
+          color: "unset",
         }}
         mode="inline"
       >
@@ -33,7 +33,7 @@ const Categories = ({ categories }) => {
           ))}
         </Menu.ItemGroup>
       </Menu>
-    </Box>
+    </Card>
   );
 };
 
