@@ -9,6 +9,7 @@ import {
   Avatar,
   Tooltip,
   IconButton,
+  Typography,
 } from "@mui/material";
 import QuickMenu from "./QuickMenu";
 import { LoadingButton } from "@mui/lab";
@@ -65,11 +66,11 @@ function Auth() {
           boxShadow: "none",
         }}
       >
-        <img
-          src={Avaxlogo}
-          alt="logo"
-          style={{ width: 50, position: "absolute" }}
-        />
+        <Box style={{ width: 50, position: "absolute" }}>
+          <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+            Acend
+          </Typography>
+        </Box>
         <Toolbar
           sx={{
             display: "flex",
